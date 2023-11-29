@@ -13,12 +13,12 @@ def user_decision(value, is_authorized):
                 try:
                     gmail_config.user_authorization()       #tu taby trzeba poprawic, cofnac bo zakomentowalem ifa
                 except:
-                    print("Authorization unsuccessful")
+                    print("Authorization unsuccessful!")
                     time.sleep(2)
                     os.system('cls')
                     menu()
                     
-                print("Authorization complete")
+                print("Authorization complete!")
                 #is_authorized = True
                 
                 gmail_config.mail_writeit()
@@ -41,9 +41,9 @@ def user_decision(value, is_authorized):
         case 2:
             print("Encryption ")
         case 3:
-            print("wyjscie")
+            print("Wyjscie")
         case _:
-            print("zly wybor")
+            print("Zly wybor")
             
 def menu():
     print("Welcome to MailToCipher, what would you like to perform?\n")
