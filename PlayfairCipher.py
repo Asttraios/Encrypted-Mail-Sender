@@ -36,28 +36,48 @@ def WordEnter(plain):
     print(matrix)
    ''' 
     for i in range (5):
-       for j in range (5):
-            if(count<len(plain)):
-                matrix[i][j] = plain[count]
-                count+=1
        if(count>=len(plain)):
            break;
+       for j in range (5):
+            if(count<len(plain)):               
+                matrix[i][j] = plain[count]
+                count+=1
+       
     return matrix
             
 
 def ReadyWord():
+   plain2 =""
+   
    plain = input("Enter a word to encrypt it: ")
    plain = str(plain)
    plain = plain.replace(" ", "")
    plain = plain.replace("j", "i")
-   print(plain)
-   WordEnter(plain)
+    
+   for i in range (len(plain)):
+       for j in range (i-1):
+           if(plain[i]!=plain[j]):
+               plain2+=plain[j]
+             
+   print(plain2)
+       
+   
+   #if(plain[i-2]!=plain[j]):
+             #plain2+=plain[i]
+
+   #print(plain)
+   #WordEnter(plain)
 
 
-#result = WordEnter("twojastara")
+#result = WordEnter("bijatyka")
 #print(result)
 
-def AlphabetFill():
+ReadyWord()
+
+#def AlphabetFill(matrix):
+    
+    
+    
     
     
     
