@@ -5,76 +5,53 @@ alphabet = "abcdefghiklmnopqrstuvwxyz"
 def WordEnter(plain):
     column = 5
     row = 5
-    count = 0
-    help_count = 0
+    count = 0                       #licznik kontroluj¹cy czy nie przekroczono dlugosci wprowadzonego slowa
     matrix = []
     new_row=[]
 
-    for i in range (5):
+    for i in range (5):             #stworzenie pustej macierzy 5x5
         for j in range (5):
             new_row.append('')
-        matrix.append(new_row)
-        new_row=[]
+        matrix.append(new_row)      #dodanie wiersza do macierzy
+        new_row=[]                  #nowy wiersz, uzupelniany pustymi stringami ""
 
-    print(matrix)
+    print(matrix)                   #kontrolne wypisanie "pustej" tablicy
    
-    '''
-    row = 5
-    count = 0
-    help_count = 0
-    matrix=[]
-    new_row=[]
-    
-    while(len(plain)>help_count):
-        if(count>=5 or (len(plain)-help_count)<5):
-            matrix.append(new_row)
-            new_row=[]
-            count = 0
-        new_row.append(plain[help_count])
-        help_count+=1
-        count+=1   
-    print(matrix)
-   ''' 
-    for i in range (5):
-       if(count>=len(plain)):
-           break;
-       for j in range (5):
-            if(count<len(plain)):               
+
+    for i in range (5):             # 5 wierszy macierzy
+       if(count>=len(plain)):       #jesli licznik przekroczy dlugosc slowa to petla sie przerywa
+           break;                   
+       for j in range (5):          # 5-elementowy wiersz
+            if(count<len(plain)):   #warunek: na wypadek gdyby nie dalo sie w pelni uzupelnic wiersza i bedzie wypelniony po czesci (bedzie mniej niz 5 liter w jednym wierszu)            
                 matrix[i][j] = plain[count]
                 count+=1
-       
-    return matrix
+    print(matrix)
+    return matrix                   #zwrot uzupelnionej macierzy 
             
 
-def ReadyWord():
-   plain2 =""
+def ReadyWord():                    #funkcja przygotowujaca klucz do wrzucenia do macierzy
    
-   plain = input("Enter a word to encrypt it: ")
-   plain = str(plain)
-   plain = plain.replace(" ", "")
-   plain = plain.replace("j", "i")
+   plain2 =""                       #klucz ktory zostanie wrzucony do macierzy
+
     
-   for i in range (len(plain)):
-       for j in range (i-1):
-           if(plain[i]!=plain[j]):
-               plain2+=plain[j]
-             
-   print(plain2)
-       
+   plain = input("Enter a word to encrypt it: ")    #wprowadzenie przez uzytkownika klucza
+   plain = str(plain)                               #zamiana na stringa na wszelki wypadek
+   plain = plain.replace(" ", "")                   #usuniecie wszelkich spacji, zespawanie slow
+   plain = plain.replace("j", "i")                  #wedlug schematu szyfru Playfaira powinno sie zastapic litery j na i
+    
+            
+   for i in range (len(plain)):                     #petla przepisujaca pierwotny klucz do nowej zmiennej, tak aby zadna litera sie nie powtarzala
+        if plain[i] not in plain2:
+            plain2+=plain[i]      
    
-   #if(plain[i-2]!=plain[j]):
-             #plain2+=plain[i]
+   print(plain2)
+               
+   
+   WordEnter(plain2)                                #przekazanie ostatecznego klucza do macierzy
 
-   #print(plain)
-   #WordEnter(plain)
-
-
-#result = WordEnter("bijatyka")
-#print(result)
 
 ReadyWord()
 
-#def AlphabetFill(matrix):
     
     
     
