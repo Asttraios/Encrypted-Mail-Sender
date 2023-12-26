@@ -1,12 +1,17 @@
 
 
+from email import message
+import numpy as np
+import secrets
+
+
 alphabet = "abcdefghiklmnopqrstuvwxyz"
 
             
 
 def ReadyWord():                    #funkcja przygotowujaca klucz do wrzucenia do macierzy
    
-   plain2 =""                       #klucz ktory zostanie wrzucony do macierzy, na pocz¹tku jest to pusty string
+   plain2 =""                       #klucz ktory zostanie wrzucony do macierzy, na poczatku jest to pusty string
 
     
    plain = input("Enter an encrypting key: ")    #wprowadzenie przez uzytkownika klucza
@@ -20,19 +25,20 @@ def ReadyWord():                    #funkcja przygotowujaca klucz do wrzucenia d
             plain2+=plain[i]      
    
    print(plain2)
+   
+   return plain2
                
    
-   WordEnter(plain2)                                #przekazanie ostatecznego klucza do macierzy kodujacej 5x5
 
 
-def WordEnter(plain):
+def WordEnter():
     
     alphabet = "abcdefghiklmnopqrstuvwxyz"
-    count = 0                       #licznik kontroluj¹cy czy nie przekroczono dlugosci wprowadzonego slowa
+    count = 0                       #licznik kontrolujacy czy nie przekroczono dlugosci wprowadzonego slowa
     matrix = []
     new_row=[]
     new_alphabet=""
-    
+    plain = ReadyWord()
 
     
     for i in range (5):             #stworzenie pustej macierzy 5x5
@@ -57,18 +63,53 @@ def WordEnter(plain):
             count+=1         
     
     print(matrix)
+    
+    MessageReady(matrix)
 
+    
+    
+
+def MessageReady(temp_matrix):    
+
+    temp_matrix=np.array(temp_matrix)
+    secret_message=input("Write down your secret message: ")
+    
+    secret_message = secret_message.replace(" ", "")
+    secret_messasge = secret_message.replace("j", "i")
+    if(len(secret_message)%2!=0):
+        secret_message=secret_message+"x"
+    
+    message_to_receive=""
+
+    for i in range (0, len(secret_message), 2):
+        pair1=secret_message[i]
+        pair2=secret_message[i+1]
         
-                
-    #print(matrix)
-    #return matrix                   #zwrot uzupelnionej macierzy 
-
-
-ReadyWord()
-
+        #print(np.where(temp_matrix == pair1))
+        
+        positionPair1 = np.where(temp_matrix == pair1)
+        positionPair2 = np.where(temp_matrix == pair2)
+        #print(position[0]) wiersze
+        #print(position[1]) kolumny
+        
+        if(positionPair1[1] == positionPair2[1] and positionPair1[1].size > 0 and positionPair2[1].size > 0):   #czy litery sa w tej samej kolumnie?
+            #print("jest")
+            pair1 = temp_matrix[(positionPair1[0]+1) % 5, (positionPair1[1]) % 5]
+            pair2 = temp_matrix[(positionPair2[0]+1) % 5, (positionPair2[1]) % 5]
+        elif(positionPair1[0] == positionPair2[0] and positionPair1[0].size > 0 and positionPair2[0] > 0 ):
+            #print("jest")
+            pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair1[1]+1) % 5]
+            pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair2[1]+1) % 5]
+        elif(positionPair1[0] != positionPair2[0] and positionPair1[1] != positionPair2[1]):
+            pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair2[1]) % 5]
+            pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair1[1]) % 5]
+        
+        
+        print(str(pair1))
+        print(str(pair2))
+        message_to_receive=message_to_receive+str(pair1)+str(pair2)
+        
+    print(message_to_receive)
     
     
-    
-    
-    
-    
+WordEnter()        
