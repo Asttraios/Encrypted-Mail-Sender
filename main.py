@@ -1,24 +1,26 @@
-import time
 import gmail_config
+import time
 import os
 
-is_authorized = False
 
 def user_decision(value):
     match value:
         case 1:
-            #try:    
+            try:    
                 gmail_config.mail_build()
-                print("Authorization complete!")
-            #except:
-                #print("Authorization unsuccessful!")
-                #time.sleep(2)
-                #os.system('cls')
-                #menu()
+                os.system('cls')
+                menu()
+                print("flag!")
+            except:
+                print("Unknown error! Contact the developer for help.")
+                time.sleep(2)
+                return 1
         case 2:
             print("Encryption ")
+            return 1
         case 3:
             print("Wyjscie")
+            return 1
         case _:
             print("Zly wybor")
             
@@ -29,5 +31,14 @@ def menu():
     print("3. Exit\n")
     value= int(input("Enter your choice: "))
     user_decision(value)
+    
+def clear():
+     # for windows
+    if name == 'nt':
+        _ = system('cls')
+ 
+    # for mac and linux(here, os.name is 'posix')
+    else:
+        _ = system('clear')
 
 menu()

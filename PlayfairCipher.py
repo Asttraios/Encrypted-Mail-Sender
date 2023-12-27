@@ -1,11 +1,7 @@
 
-from tkinter import WORD
 import numpy as np
 
-
-alphabet = "abcdefghiklmnopqrstuvwxyz"
-
-            
+    
 
 def ReadyWord():                    #funkcja przygotowujaca klucz do wrzucenia do macierzy
    
@@ -94,21 +90,21 @@ def MessageReady():
         
         if(positionPair1[1] == positionPair2[1]):   #czy litery sa w tej samej kolumnie?
             #print("jest")
-            pair1 = temp_matrix[(positionPair1[0]+1) % 5, (positionPair1[1]) % 5].astype(str).flatten()
-            pair2 = temp_matrix[(positionPair2[0]+1) % 5, (positionPair2[1]) % 5].astype(str).flatten()
+            pair1 = temp_matrix[(positionPair1[0]+1) % 5, (positionPair1[1]) % 5].astype(str).item()
+            pair2 = temp_matrix[(positionPair2[0]+1) % 5, (positionPair2[1]) % 5].astype(str).item()
         elif(positionPair1[0] == positionPair2[0]):
             #print("jest")
-            pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair1[1]+1) % 5].astype(str).flatten()
-            pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair2[1]+1) % 5].astype(str).flatten()
+            pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair1[1]+1) % 5].astype(str).item()
+            pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair2[1]+1) % 5].astype(str).item()
         else:
-            pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair2[1]) % 5].astype(str).flatten()
-            pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair1[1]) % 5].astype(str).flatten()
+            pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair2[1]) % 5].astype(str).item()
+            pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair1[1]) % 5].astype(str).item()
         
         
         print(pair1)
         print(pair2)
 
-        message_to_receive+=str(pair1) + str(pair2)
+        message_to_receive+=pair1 +pair2
         
     print(secret_message[4])
     print(message_to_receive)

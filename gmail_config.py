@@ -1,5 +1,4 @@
-from multiprocessing.spawn import import_main_path
-import smtplib, ssl, getpass, base64, os
+import base64, os
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -9,10 +8,8 @@ from PlayfairCipher import MessageReady
 import os
 import time
 
-pass_error = "Wrong password, try again!"
 EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
 #EMAIL_PASSWORD = os.environ.get('EMAIL_PASS')
-
 
 
 
@@ -22,8 +19,13 @@ def user_authorization():
 
     if os.path.exists("token.json"):
         print("Before you send anything, you must be authorized! Checking for token...")
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-        print("Token is valid!")
+        try:
+            creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+            print("Token is valid!")
+        except:
+            print("Error. Unable to check if Token is valid! Exiting...")
+            time.sleep(2)
+            return 1
   # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -74,7 +76,7 @@ def mail_build():
         input()
         
     else:
-        #os.system('cls')
+        os.system('cls')
         print("Discarding message...")
         time.sleep(2)
         
@@ -83,8 +85,6 @@ def mail_build():
   # created automatically when the authorization flow completes for the first
   # time.
 
-#password = input("Enter your passwod: ")
-# Send email here
 def checkNsend(message, service):
     
     
