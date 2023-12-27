@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>2dc70bb1-27fd-45a9-817a-e1ad77ae64db</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>PlayfairCipher.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

@@ -1,8 +1,6 @@
 
-
-from email import message
+from tkinter import WORD
 import numpy as np
-import secrets
 
 
 alphabet = "abcdefghiklmnopqrstuvwxyz"
@@ -64,19 +62,21 @@ def WordEnter():
     
     print(matrix)
     
-    MessageReady(matrix)
+    return matrix
 
     
     
 
-def MessageReady(temp_matrix):    
-
+def MessageReady():
+    
+    temp_matrix = WordEnter()
     temp_matrix=np.array(temp_matrix)
     secret_message=input("Write down your secret message: ")
     
     secret_message = secret_message.replace(" ", "")
-    secret_messasge = secret_message.replace("j", "i")
+    secret_message = secret_message.replace("j", "i")
     if(len(secret_message)%2!=0):
+        print("nieparzyste")
         secret_message=secret_message+"x"
     
     message_to_receive=""
@@ -92,24 +92,27 @@ def MessageReady(temp_matrix):
         #print(position[0]) wiersze
         #print(position[1]) kolumny
         
-        if(positionPair1[1] == positionPair2[1] and positionPair1[1].size > 0 and positionPair2[1].size > 0):   #czy litery sa w tej samej kolumnie?
+        if(positionPair1[1] == positionPair2[1]):   #czy litery sa w tej samej kolumnie?
             #print("jest")
-            pair1 = temp_matrix[(positionPair1[0]+1) % 5, (positionPair1[1]) % 5]
-            pair2 = temp_matrix[(positionPair2[0]+1) % 5, (positionPair2[1]) % 5]
-        elif(positionPair1[0] == positionPair2[0] and positionPair1[0].size > 0 and positionPair2[0] > 0 ):
+            pair1 = temp_matrix[(positionPair1[0]+1) % 5, (positionPair1[1]) % 5].astype(str).flatten()
+            pair2 = temp_matrix[(positionPair2[0]+1) % 5, (positionPair2[1]) % 5].astype(str).flatten()
+        elif(positionPair1[0] == positionPair2[0]):
             #print("jest")
-            pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair1[1]+1) % 5]
-            pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair2[1]+1) % 5]
-        elif(positionPair1[0] != positionPair2[0] and positionPair1[1] != positionPair2[1]):
-            pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair2[1]) % 5]
-            pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair1[1]) % 5]
+            pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair1[1]+1) % 5].astype(str).flatten()
+            pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair2[1]+1) % 5].astype(str).flatten()
+        else:
+            pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair2[1]) % 5].astype(str).flatten()
+            pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair1[1]) % 5].astype(str).flatten()
         
         
-        print(str(pair1))
-        print(str(pair2))
-        message_to_receive=message_to_receive+str(pair1)+str(pair2)
+        print(pair1)
+        print(pair2)
+
+        message_to_receive+=str(pair1) + str(pair2)
         
+    print(secret_message[4])
     print(message_to_receive)
+    return message_to_receive
     
-    
-WordEnter()        
+if __name__ == "__main__":
+    MessageReady()   

@@ -1,9 +1,13 @@
+from multiprocessing.spawn import import_main_path
 import smtplib, ssl, getpass, base64, os
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from email.message import EmailMessage
+from PlayfairCipher import MessageReady
+import os
+import time
 
 pass_error = "Wrong password, try again!"
 EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
@@ -42,14 +46,15 @@ def user_authorization():
 def mail_writeit():
       receiver = input("Receiver: ")
       subject = input("Subject: ")
-      body = input("Write down the message: ")
+      body = MessageReady()
       return receiver, subject, body
       
 
 def mail_build(): 
 
-    receiver, subject, body=mail_writeit()
     creds = user_authorization()
+    receiver, subject, body=mail_writeit()
+   
     
     service = build("gmail", "v1", credentials=creds)
     message = EmailMessage()
@@ -58,7 +63,22 @@ def mail_build():
     message['TO'] = receiver
     message.set_content(body)
     
-    checkNsend(message, service)
+    
+    user_confirm = input("Confirm? Y/N: ").strip().lower()
+    
+    if(user_confirm=='y'):
+        os.system('cls')      
+        print("Building...\n")
+        checkNsend(message, service)
+        print("E-Mail has been sent!\n Press any key to go back to menu...")
+        input()
+        
+    else:
+        #os.system('cls')
+        print("Discarding message...")
+        time.sleep(2)
+        
+
   # The file token.json stores the user's access and refresh tokens, and is
   # created automatically when the authorization flow completes for the first
   # time.
@@ -66,6 +86,8 @@ def mail_build():
 #password = input("Enter your passwod: ")
 # Send email here
 def checkNsend(message, service):
+    
+    
     raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode("utf-8")
 
     message = service.users().messages().send(userId="me", body={'raw': raw_message}).execute()
