@@ -12,7 +12,7 @@ def user_decision(value):
                 menu()
                 print("flag!")
             except:
-                print("Unknown error! Contact the developer for help.")
+                #print("Unknown error! Contact the developer for help.")
                 time.sleep(2)
                 return 1
         case 2:
