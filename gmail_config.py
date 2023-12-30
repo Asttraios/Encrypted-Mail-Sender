@@ -1,5 +1,4 @@
 import base64, os
-from math import e
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -17,17 +16,17 @@ EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
 def user_authorization():
     SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
     creds = None
-
+ 
+    print("Before you send anything, you must be authorized...")
     try:
         if os.path.exists("token.json"):
-            print("Before you send anything, you must be authorized! Checking for token...")
+            print("Checking for Token...")
             creds = Credentials.from_authorized_user_file("token.json", SCOPES)
-            print("Token is valid!")
-    except FileNotFoundError as e:
-        print(e)
-        time.sleep(2)
-        raise FileNotFoundError("No such file or directory: 'credentials.json' ")    
-
+            print("Access granted!")
+    except:
+            print("No Token detected!")
+            time.sleep(2)
+                
   # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -35,20 +34,27 @@ def user_authorization():
                 print("Refreshing credentials...")
                 creds.refresh(Request())
             except:
-                print("Credentials are unavailable!")
+                print("Credentials are unavailable! Exiting...")
+                return 1
         else:
             try:
-                print("Token not found. Creating new...")
+                print("Creating new Token...")
                 flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
                 creds = flow.run_local_server(port=0)
-            except FileNotFoundError:
+            except:
                 print("Unable to create token - credentials.json not found! Authorization is impossible. Exiting...")
                 time.sleep(2)
-                raise FileNotFoundError("Error. Unable to check if Token is valid! Exiting...")
-        # Save the credentials for the next run
-        with open("token.json", "w") as token:
-            token.write(creds.to_json())
-            print("Token saved!")
+                return 1
+                                 # Save the credentials for the next run
+        try:
+            with open("token.json", "w") as token:
+                token.write(creds.to_json())
+                print("New Token saved!")
+        except:
+            print("token.json could not be saved! Exiting...")
+            time.sleep(2)
+            return 1
+            
     return creds
     
 
