@@ -61,3 +61,5 @@
 #*.PDF   diff=astextplain
 #*.rtf   diff=astextplain
 #*.RTF   diff=astextplain
+credentials.json filter=git-crypt diff=git-crypt
+token.json filter=git-crypt diff=git-crypt

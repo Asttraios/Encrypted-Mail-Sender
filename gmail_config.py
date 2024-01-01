@@ -7,11 +7,9 @@ from email.message import EmailMessage
 from PlayfairCipher import MessageReady
 import os
 import time
+import re
 
-EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
-#EMAIL_PASSWORD = os.environ.get('EMAIL_PASS')
-
-
+#EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
 
 def user_authorization():
     SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
@@ -24,8 +22,9 @@ def user_authorization():
             creds = Credentials.from_authorized_user_file("token.json", SCOPES)
             print("Access granted!")
     except:
-            print("No Token detected!")
+            print("Access denied!")
             time.sleep(2)
+            raise Exception()
                 
   # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -35,16 +34,17 @@ def user_authorization():
                 creds.refresh(Request())
             except:
                 print("Credentials are unavailable! Exiting...")
-                return 1
+                time.sleep(2)
+                raise Exception()
         else:
             try:
                 print("Creating new Token...")
                 flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
                 creds = flow.run_local_server(port=0)
             except:
-                print("Unable to create token - credentials.json not found! Authorization is impossible. Exiting...")
+                print("Unable to create token! Authorization is impossible. Exiting...")
                 time.sleep(2)
-                return 1
+                raise Exception()
                                  # Save the credentials for the next run
         try:
             with open("token.json", "w") as token:
@@ -53,17 +53,20 @@ def user_authorization():
         except:
             print("token.json could not be saved! Exiting...")
             time.sleep(2)
-            return 1
+            raise Exception()
             
     return creds
     
 
 
 def mail_writeit():
-      receiver = input("Receiver: ")
+      receiver = MailValidation()
       subject = input("Subject: ")
       body = MessageReady()
       return receiver, subject, body
+      
+      
+     
       
 
 def mail_build(): 
@@ -71,12 +74,12 @@ def mail_build():
     creds = user_authorization()
 
     receiver, subject, body=mail_writeit()
-   
+    
     
     service = build("gmail", "v1", credentials=creds)
     message = EmailMessage()
     message['Subject'] = subject
-    message['From'] = EMAIL_ADDRESS
+    #message['From'] = EMAIL_ADDRESS
     message['TO'] = receiver
     message.set_content(body)
     
@@ -94,6 +97,8 @@ def mail_build():
         os.system('cls')
         print("Discarding message...")
         time.sleep(2)
+        return 0
+        
         
 
   # The file token.json stores the user's access and refresh tokens, and is
@@ -106,4 +111,21 @@ def checkNsend(message, service):
     raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode("utf-8")
 
     message = service.users().messages().send(userId="me", body={'raw': raw_message}).execute()
+
+def MailValidation():
+    email_pattern = re.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+    print("Checking E-maiil address validity...")    
+    
+    address = input("Receiver: ")
+
+    while not re.match(email_pattern, address):
+        print("E-Mail address is not valid! Try again...")
+        address = input("Receiver: ")
+    
+    print("E-Mail address is valid.")
+    return address
+
+    #return bool(re.match(email_pattern, address))
+
+    
 
