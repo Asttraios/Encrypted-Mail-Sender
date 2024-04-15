@@ -18,7 +18,6 @@ def ReadyWord():                    #funkcja przygotowujaca klucz do wrzucenia d
         if plain[i] not in plain2:
             plain2+=plain[i]      
    
-   print(plain2)
    
    return plain2
                
@@ -49,14 +48,12 @@ def WordEnter():
     
     matrix_content = plain+new_alphabet
 
-    print(matrix_content)
     
     for i in range (5):             # 5 wierszy macierzy      
        for j in range (5):          # 5-elementowy wiersz
             matrix[i][j] = matrix_content[count]
             count+=1         
     
-    print(matrix)
     
     return matrix
 
@@ -81,19 +78,15 @@ def MessageReady():
         pair1=secret_message[i]
         pair2=secret_message[i+1]
         
-        #print(np.where(temp_matrix == pair1))
         
         positionPair1 = np.where(temp_matrix == pair1)
         positionPair2 = np.where(temp_matrix == pair2)
-        #print(position[0]) wiersze
-        #print(position[1]) kolumny
+
         
         if(positionPair1[1] == positionPair2[1]):   #czy litery sa w tej samej kolumnie?
-            #print("jest")
             pair1 = temp_matrix[(positionPair1[0]+1) % 5, (positionPair1[1]) % 5].astype(str).item()
             pair2 = temp_matrix[(positionPair2[0]+1) % 5, (positionPair2[1]) % 5].astype(str).item()
         elif(positionPair1[0] == positionPair2[0]):
-            #print("jest")
             pair1 = temp_matrix[(positionPair1[0]) % 5, (positionPair1[1]+1) % 5].astype(str).item()
             pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair2[1]+1) % 5].astype(str).item()
         else:
@@ -101,13 +94,8 @@ def MessageReady():
             pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair1[1]) % 5].astype(str).item()
         
         
-        print(pair1)
-        print(pair2)
-
         message_to_receive+=pair1 +pair2
         
-    print(secret_message[4])
-    print(message_to_receive)
     return message_to_receive
     
 if __name__ == "__main__":
