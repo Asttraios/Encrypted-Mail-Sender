@@ -72,7 +72,6 @@ It's a digraph substitution cipher.
 
 ```markdown
 | A | S | F | C | H |
-|---|---|---|---|---|
 ```
 
 C becomes H, A becomes S<br/>
@@ -81,7 +80,6 @@ C becomes H, A becomes S<br/>
 
 ```markdown
 | A | G | Y | M | F |
-|---|---|---|---|---|
 | Z | W | R | T | U |
 | C | X | B | L | P |
 | D | S | K | I | O |
@@ -93,7 +91,6 @@ Here C becomes D and A becomes Z<br/>
 
 ```markdown
 | A | G | Y | M | F |
-|---|---|---|---|---|
 | Z | W | R | T | U |
 | L | X | B | C | P |
 | D | S | K | I | O |
