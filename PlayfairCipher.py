@@ -1,37 +1,37 @@
 
 import numpy as np
-
+import string
+import re
     
 
-def ReadyWord():                    #funkcja przygotowujaca klucz do wrzucenia do macierzy
-   
-   plain2 =""                       #klucz ktory zostanie wrzucony do macierzy, na poczatku jest to pusty string
+def EncryptionKeyGenerate():
 
     
-   plain = input("Enter an encrypting key: ")    #wprowadzenie przez uzytkownika klucza
-   plain = str(plain)                               #zamiana na stringa na wszelki wypadek
-   plain = plain.replace(" ", "")                   #usuniecie wszelkich spacji, zespawanie slow
-   plain = plain.replace("j", "i")                  #wedlug schematu szyfru Playfaira powinno sie zastapic litery j na i
+    encryption_key = input("Enter an encrypting key: ").lower()  # Wprowadzenie klucza przez u¿ytkownika
     
-            
-   for i in range (len(plain)):                     #petla przepisujaca pierwotny klucz do nowej zmiennej, tak aby zadna litera sie nie powtarzala
-        if plain[i] not in plain2:
-            plain2+=plain[i]      
-   
-   
-   return plain2
+    # Usuwamy interpunkcjê, spacje i zamieniamy 'j' na 'i'
+    encryption_key = re.sub(f"[{string.punctuation}]", "", encryption_key.replace(" ", "").replace("j", "i"))
+    
+                                                        
+    encryption_key_ready = ""     
+    
+    for char in encryption_key:                       # Sprawdzamy czy litera nie wystêpuje ju¿ w kluczu
+        if char not in encryption_key_ready:
+            encryption_key_ready += char
+    
+    return encryption_key_ready
                
    
 
 
-def WordEnter():
+def MatrixAlphabetFill():
     
     alphabet = "abcdefghiklmnopqrstuvwxyz"
     count = 0                       #licznik kontrolujacy czy nie przekroczono dlugosci wprowadzonego slowa
     matrix = []
     new_row=[]
     new_alphabet=""
-    plain = ReadyWord()
+    encryption_key = EncryptionKeyGenerate()
 
     
     for i in range (5):             #stworzenie pustej macierzy 5x5
@@ -42,11 +42,11 @@ def WordEnter():
 
     
     for i in range (len(alphabet)):
-        if(alphabet[i] not in plain):
+        if(alphabet[i] not in encryption_key):
             new_alphabet+=str(alphabet[i])
             
     
-    matrix_content = plain+new_alphabet
+    matrix_content = encryption_key+new_alphabet
 
     
     for i in range (5):             # 5 wierszy macierzy      
@@ -57,22 +57,35 @@ def WordEnter():
     
     return matrix
 
-    
-    
+def PrepareSecretMessage(secret_message):
 
-def MessageReady():
+    secret_message = re.sub(f"[{string.punctuation}]", "", secret_message.lower().replace(" ", "").replace("j", "i"))
+
+    processed_message = ""
+    i = 0
+    while i < len(secret_message):
+        processed_message += secret_message[i]
+        
+        if i + 1 < len(secret_message) and secret_message[i] == secret_message[i + 1]:
+            processed_message += "x"
+        
+        i += 1
+
+    if len(processed_message) % 2 != 0:
+        processed_message += "x"
+
+    return processed_message    
+
+
+def MessagePlayfairEncryption():
     
-    temp_matrix = WordEnter()
+    temp_matrix = MatrixAlphabetFill()
     temp_matrix=np.array(temp_matrix)
     secret_message=input("Write down your secret message: ")
     
-    secret_message = secret_message.replace(" ", "")
-    secret_message = secret_message.replace("j", "i")
-    if(len(secret_message)%2!=0):
-        print("nieparzyste")
-        secret_message=secret_message+"x"
+    secret_message = PrepareSecretMessage(secret_message)
     
-    message_to_receive=""
+    encrypted_message=""
 
     for i in range (0, len(secret_message), 2):
         pair1=secret_message[i]
@@ -94,9 +107,9 @@ def MessageReady():
             pair2 = temp_matrix[(positionPair2[0]) % 5, (positionPair1[1]) % 5].astype(str).item()
         
         
-        message_to_receive+=pair1 +pair2
+        encrypted_message+=pair1 +pair2
         
-    return message_to_receive
+    return encrypted_message
     
 if __name__ == "__main__":
-    MessageReady()   
+    MessagePlayfairEncryption()   

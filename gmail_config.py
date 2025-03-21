@@ -4,12 +4,11 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 from email.message import EmailMessage
-from PlayfairCipher import MessageReady
+from PlayfairCipher import MessagePlayfairEncryption
 import os
 import time
 import re
 
-#EMAIL_ADDRESS = os.environ.get('EMAIL_USER')
 
 def user_authorization():
     SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
@@ -27,6 +26,7 @@ def user_authorization():
             raise Exception()
                 
   # If there are no (valid) credentials available, let the user log in.
+
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             try:
@@ -58,16 +58,13 @@ def user_authorization():
     return creds
     
 
-
 def mail_writeit():
       receiver = MailValidation()
       subject = input("Subject: ")
-      body = MessageReady()
+      body = MessagePlayfairEncryption()
       return receiver, subject, body
       
-      
-     
-      
+         
 
 def mail_build(): 
 

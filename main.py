@@ -2,6 +2,7 @@ import gmail_config
 import time
 import os
 import requests
+import socket
 
 
 
@@ -29,29 +30,33 @@ def menu():
     print("Welcome to MailToCipher, what would you like to perform?\n")
     print("1. Write a message\n")
     print("2. Exit\n")
-    value= int(input("Enter your choice: "))
-    user_decision(value)
-    
 
-def CheckInternetConnection():
+    try:
+        value= int(input("Enter your choice: "))
+        user_decision(value)
+    except:
+        print("Invalid input! Please try again.")
+        time.sleep(1)
+        os.system('cls')
+        menu()
+
+def CheckInternetConnection(host="8.8.8.8", port=53, timeout=3):
     url = 'https://www.google.com/'
     
     
     while True:
         try:
-            x = requests.get(url)
-            print("Status code: " + str(x.status_code))
+            socket.setdefaulttimeout(timeout)
+            socket.socket(socket.AF_INET, socket.SOCK_STREAM).connect((host, port))
             print("Internet connection is established!")
             time.sleep(1)
             os.system('cls')
-            return 1
-        except requests.ConnectionError:
-            print("Status code: 404")
-            print("No Internet connection!")
+            return True
+
+        except (socket.error, socket.timeout):
+            print("No internet connection")
             time.sleep(1)
             os.system('cls')
-            time.sleep(1)
-
-
+            return False
 
 menu()
