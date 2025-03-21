@@ -365,3 +365,7 @@ FodyWeavers.xsd
 
 *.pyproj
 *.sln
+env/
+**/__pycache__/
+.vs/
+*.json
